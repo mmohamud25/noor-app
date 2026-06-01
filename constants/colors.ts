@@ -1,0 +1,33 @@
+export const colors = {
+  bg:         '#0A1410',
+  panel:      '#111D17',
+  card:       '#162218',
+  green:      '#1B4332',
+  mid:        '#2D6A4F',
+  gold:       '#C9A84C',
+  goldL:      '#E8CC7A',
+  ink:        '#F5F0E8',
+  muted:      'rgba(245,240,232,0.45)',
+  border:     'rgba(201,168,76,0.18)',
+  success:    '#34D399',
+  warning:    '#FBBF24',
+  error:      '#E57373',
+  juzDone:    'rgba(45,106,79,0.55)',
+  juzReading: 'rgba(201,168,76,0.18)',
+  juzNone:    'rgba(255,255,255,0.04)',
+};
+
+export const fonts = {
+  regular:   'Outfit-Regular',
+  medium:    'Outfit-Medium',
+  semibold:  'Outfit-SemiBold',
+  bold:      'Outfit-Bold',
+  arabic:    'Arabic-Regular',
+  arabicBold:'Arabic-Bold',
+  quran:     'Quran-Regular',
+  quranBold: 'Quran-Bold',
+  body:      'Outfit-Regular',
+  heading:   'Outfit-Bold',
+  headingR:  'Outfit-Regular',
+  headingI:  'Outfit-Medium',
+};
