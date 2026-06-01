@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { WarningIcon, CheckIcon } from '../../components/Icons';
 import { colors, fonts } from '../../constants/colors';
-import { useAuth } from '../../hooks/useAuth';
+import { supabase } from '../../lib/supabase';
 
 function getPasswordStrength(p: string): { label:string; color:string; width:string } {
   if (p.length===0) return {label:'',color:'transparent',width:'0%'};
@@ -16,7 +16,7 @@ function getPasswordStrength(p: string): { label:string; color:string; width:str
 
 export default function SignUpScreen() {
   const router = useRouter();
-  const { signUpWithEmail } = useAuth();
+  
   const [name, setName]         = useState('');
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
@@ -31,7 +31,11 @@ export default function SignUpScreen() {
     if (password.length<6) { setError('Password must be at least 6 characters.'); return; }
     if (!agreed) { setError('Please agree to the Terms of Service to continue.'); return; }
     setLoading(true); setError('');
-    const { error:err } = await signUpWithEmail(email, password, name.trim()) as any;
+    const { error:err } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: { data: { name: name.trim() } }
+    });
     if (err) { setError(err.message); setLoading(false); }
     else { router.replace('/(tabs)'); }
   }

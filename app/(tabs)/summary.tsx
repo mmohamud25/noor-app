@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BookOpenIcon, StarIcon, StreakIcon, CheckIcon } from '../../components/Icons';
 import Svg, { Path, Circle, Rect, Line, Polyline } from 'react-native-svg';
-import { colors } from '../../constants/colors';
+import { colors, fonts } from '../../constants/colors';
 import { getQuranProgress, getCompletedLessons, getStreak, getTodayDhikr } from '../../lib/storage';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -33,7 +33,7 @@ export default function SummaryScreen() {
   useEffect(() => {
     getQuranProgress().then(q => setJuzDone(Object.values(q).filter(v => v==='complete').length)).catch(()=>{});
     getCompletedLessons().then(l => setLessons(l.length)).catch(()=>{});
-    getStreak().then(setStreak).catch(()=>{});
+    getStreak().then(function(s) { setStreak(typeof s === 'object' ? (s.count || 0) : s); }).catch(()=>{});
     getTodayDhikr().then(d => {
       setDhikrDone(d.subhanallah>=33 && d.alhamdulillah>=33 && d.allahuakbar>=34);
     }).catch(()=>{});

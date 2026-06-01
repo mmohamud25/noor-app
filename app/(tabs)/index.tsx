@@ -7,7 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, fonts } from '../../constants/colors';
-import { BookOpenIcon, DhikrIco, LearnIcon, DuaIcon } from '../../components/Icons';
+import { BookOpenIcon } from '../../components/Icons';
+import Svg, { Path, Circle, Rect, Line } from 'react-native-svg';
 import { getCompletedLessons, getQuranProgress } from '../../lib/storage';
 
 const AYAHS = [
@@ -22,6 +23,42 @@ const AYAHS = [
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function BookSvgIcon({ color }) {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+      <Rect x={3} y={2} width={18} height={20} rx={2} stroke={color} strokeWidth={1.6}/>
+      <Line x1={7} y1={2} x2={7} y2={22} stroke={color} strokeWidth={1.4} strokeOpacity={0.5}/>
+      <Line x1={10} y1={8} x2={19} y2={8} stroke={color} strokeWidth={1.2} strokeOpacity={0.6}/>
+      <Line x1={10} y1={12} x2={19} y2={12} stroke={color} strokeWidth={1.2} strokeOpacity={0.4}/>
+    </Svg>
+  );
+}
+function DhikrSvgIcon({ color }) {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+      <Circle cx={12} cy={12} r={9} stroke={color} strokeWidth={1.6}/>
+      <Circle cx={12} cy={12} r={3} stroke={color} strokeWidth={1.4}/>
+      <Line x1={12} y1={3} x2={12} y2={6} stroke={color} strokeWidth={1.4} strokeLinecap="round"/>
+    </Svg>
+  );
+}
+function LearnSvgIcon({ color }) {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+      <Path d="M12 3L2 8l10 5 10-5-10-5z" stroke={color} strokeWidth={1.6} strokeLinejoin="round"/>
+      <Path d="M6 10.5v5a6 6 0 0012 0v-5" stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
+    </Svg>
+  );
+}
+function DuasSvgIcon({ color }) {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+      <Path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke={color} strokeWidth={1.6} strokeLinejoin="round"/>
+      <Path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke={color} strokeWidth={1.6} strokeLinejoin="round"/>
+    </Svg>
+  );
 }
 
 function ActionIcon({ type }) {
@@ -42,47 +79,6 @@ function ActionIcon({ type }) {
   );
 }
 
-function BookSvgIcon({ color }) {
-  const Svg  = require('react-native-svg').default;
-  const Rect = require('react-native-svg').Rect;
-  const Line = require('react-native-svg').Line;
-  return <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
-    <Rect x={3} y={2} width={18} height={20} rx={2} stroke={color} strokeWidth={1.6}/>
-    <Line x1={7} y1={2} x2={7} y2={22} stroke={color} strokeWidth={1.4} strokeOpacity={0.5}/>
-    <Line x1={10} y1={8} x2={19} y2={8} stroke={color} strokeWidth={1.2} strokeOpacity={0.6}/>
-    <Line x1={10} y1={12} x2={19} y2={12} stroke={color} strokeWidth={1.2} strokeOpacity={0.4}/>
-  </Svg>;
-}
-
-function DhikrSvgIcon({ color }) {
-  const Svg    = require('react-native-svg').default;
-  const Circle = require('react-native-svg').Circle;
-  const Line   = require('react-native-svg').Line;
-  return <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
-    <Circle cx={12} cy={12} r={9} stroke={color} strokeWidth={1.6}/>
-    <Circle cx={12} cy={12} r={3} stroke={color} strokeWidth={1.4}/>
-    <Line x1={12} y1={3} x2={12} y2={6} stroke={color} strokeWidth={1.4} strokeLinecap="round"/>
-  </Svg>;
-}
-
-function LearnSvgIcon({ color }) {
-  const Svg      = require('react-native-svg').default;
-  const Path     = require('react-native-svg').Path;
-  return <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
-    <Path d="M12 3L2 8l10 5 10-5-10-5z" stroke={color} strokeWidth={1.6} strokeLinejoin="round"/>
-    <Path d="M2 8v6M6 10.5v5a6 6 0 0012 0v-5" stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
-  </Svg>;
-}
-
-function DuasSvgIcon({ color }) {
-  const Svg  = require('react-native-svg').default;
-  const Path = require('react-native-svg').Path;
-  const Line = require('react-native-svg').Line;
-  return <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
-    <Path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke={color} strokeWidth={1.6} strokeLinejoin="round"/>
-    <Path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke={color} strokeWidth={1.6} strokeLinejoin="round"/>
-  </Svg>;
-}
 
 
 export default function HomeScreen() {

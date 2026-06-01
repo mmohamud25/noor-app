@@ -139,7 +139,7 @@ export function useQuranAudio() {
           }
           // Schedule next ayah transition exactly
           if (cur < t.length) {
-            const nextMs = t[cur] - pos;
+            const nextMs = t[cur] - pos - 300;
             if (nextMs > 50 && nextMs < 15000) {
               const expectedAyah = cur + 1;
               highlightTimer.current = setTimeout(function() {

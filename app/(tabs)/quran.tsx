@@ -463,7 +463,7 @@ function PageReader({ initialPage, onClose }) {
   const [bookmarks,     setBookmarks]     = useState([]);
   const [barCollapsed,  setBarCollapsed]  = useState(false);
   const [tajweedMode,   setTajweedMode]   = useState(false);
-  const [tajweedCache,  setTajweedCache]  = useState({});
+  const tajweedCacheRef = useRef({});
 
   const audio      = useQuranAudio();
   const scrollRef  = useRef(null);
@@ -497,7 +497,7 @@ function PageReader({ initialPage, onClose }) {
   }, []);
 
   async function fetchTajweed(pageNum) {
-    if (tajweedCache[pageNum]) return;
+    if (tajweedCacheRef.current[pageNum]) return;
     try {
       const res  = await fetch(
         'https://api.qurancdn.com/api/qdc/verses/by_page/' + pageNum +
@@ -511,11 +511,7 @@ function PageReader({ initialPage, onClose }) {
         const words = (v.words || []).filter(function(w) { return w.char_type_name === 'word'; });
         wordMap[key] = words.map(function(w) { return w.text_uthmani_tajweed || ''; });
       });
-      setTajweedCache(function(prev) {
-        const n = Object.assign({}, prev);
-        n[pageNum] = wordMap;
-        return n;
-      });
+      tajweedCacheRef.current[pageNum] = wordMap;
     } catch(e) { }
   }
 
@@ -617,14 +613,19 @@ function PageReader({ initialPage, onClose }) {
         if (pendingJumpRef.current === pageNum && scrollRef.current) {
           const targetPage = pendingJumpRef.current;
           pendingJumpRef.current = null;
-          setTimeout(function() {
-            const yy = pageYRef.current[targetPage];
+          var jumpAttempts = 0;
+          var tryJump = function() {
+            var yy = pageYRef.current[targetPage];
             if (yy !== undefined && scrollRef.current) {
               scrollRef.current.scrollTo({ y: Math.max(0, yy - 20), animated: false });
               setCurrentPage(targetPage);
               initDone.current = true;
+            } else if (jumpAttempts < 10) {
+              jumpAttempts++;
+              setTimeout(tryJump, 200);
             }
-          }, 100);
+          };
+          setTimeout(tryJump, 100);
         }
         // Handle initial page scroll
         if (!initDone.current && pageNum === initialPage && scrollRef.current) {
@@ -673,7 +674,7 @@ function PageReader({ initialPage, onClose }) {
                         <Text key={i} onPress={function() { setSelectedAyah(a); setShowAyahSheet(true); }}>
                           {(function() {
                             const vkey = a.surahNum + ':' + a.number;
-                            const pageWords = tajweedCache[pageNum];
+                            const pageWords = tajweedCacheRef.current[pageNum];
                             const words = pageWords && pageWords[vkey];
                             const baseColor = isSelected ? '#060D09' : isActive ? gold : ink;
                             const bgColor   = isSelected ? gold : isActive ? hl : undefined;
@@ -819,7 +820,7 @@ function PageReader({ initialPage, onClose }) {
               onPress={function() {
                 const v = !tajweedMode;
                 setTajweedMode(v);
-                if (v) loadedPages.forEach(function(p) { fetchTajweed(p); });
+                if (v) { tajweedCacheRef.current = {}; loadedPages.forEach(function(p) { fetchTajweed(p); }); }
                 saveSettings({ tajweedMode: v });
               }} activeOpacity={0.8}>
               <Text style={[mo.toggleTxt, { color: ink }]}>Tajweed Colors</Text>
